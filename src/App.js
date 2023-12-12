@@ -1,23 +1,44 @@
-import logo from './logo.svg';
 import './App.css';
+import Withoutjsx from './Withoutjsx';
+import { Mainfile } from './react-redux/Mainfile';
+import { All } from './redux-toolkit/All';
+
+
+import { useDispatch, useSelector } from 'react-redux'
+
+import { takeGetUserFetchAction } from './redux-saga/ActionCreators';
 
 function App() {
+
+  const dispatch = useDispatch()
+  const retreiveddata = useSelector((state) => state.myReducer)
+  console.log(retreiveddata, "retreiveddata")
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+
+      <Mainfile />
+      <All />
+      <Withoutjsx />
+
+      <h1>USERS</h1>
+      <h2>REDUX SAGA</h2>
+      <button onClick={() => dispatch(takeGetUserFetchAction())}>Get Users </button>
+      <hr />
+      <div>
+        {
+          retreiveddata?.users && retreiveddata.users.map((user) => {
+            return <div key={user.id}>{user.name}</div>
+          })
+        }
+        {
+          retreiveddata?.error && <p>{retreiveddata.error.message}</p>
+        }
+      </div>
+
     </div>
   );
 }
